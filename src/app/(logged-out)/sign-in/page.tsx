@@ -1,11 +1,9 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { Button, FormGroup, InputGroup, Callout, Spinner, Intent } from '@/lib/blueprint';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn, useSession } from 'next-auth/react';
-
 export default function SignInPage() {
     const router = useRouter();
     const [error, setError] = useState('');
@@ -15,11 +13,9 @@ export default function SignInPage() {
         password: ''
     });
     const { data: session } = useSession();
-
     useEffect(() => {
         document.title = "Sign In - Blueprint App";
     }, []);
-
     if (session) {
         router.push('/home');
         return (
@@ -29,39 +25,33 @@ export default function SignInPage() {
             </div>
         );
     }
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-
         try {
             const result = await signIn('credentials', {
                 email: formData.email,
                 password: formData.password,
                 redirect: false,
             });
-
             if (result?.error) {
                 setError('Invalid email or password');
                 setIsLoading(false);
             } else {
                 router.push('/home');
             }
-        } catch (error) {
-            console.error('Login error:', error);
+        } catch {
             setError('An error occurred during login');
             setIsLoading(false);
         }
     }
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center">
@@ -70,7 +60,6 @@ export default function SignInPage() {
             </div>
         );
     }
-
     return (
         <div>
             <h2 className="text-xl mb-4 font-bold">Sign In</h2>
@@ -90,7 +79,6 @@ export default function SignInPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-                
                 <FormGroup 
                     label="Password" 
                     labelFor="password-input"
@@ -106,7 +94,6 @@ export default function SignInPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-
                 <Button 
                     type="submit" 
                     intent="primary" 
@@ -116,13 +103,11 @@ export default function SignInPage() {
                     disabled={isLoading}
                 />
             </form>
-
             {error && (
                 <Callout intent="danger" className="mt-4">
                     {error}
                 </Callout>
             )}
-
             <p className="mt-4 text-sm">
                 <span>Don&apos;t have an account?</span>{' '}
                 <Link href="/sign-up" className="text-blue-600 underline">

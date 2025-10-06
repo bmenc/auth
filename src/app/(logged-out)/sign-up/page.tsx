@@ -1,10 +1,8 @@
 'use client';
-
 import { Button, FormGroup, InputGroup, Callout, Intent } from "@/lib/blueprint";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-
 export default function SignUpPage() {
     const router = useRouter();
     const [error, setError] = useState('');
@@ -16,30 +14,25 @@ export default function SignUpPage() {
         password: '',
         confirmPassword: ''
     });
-
     useEffect(() => {
         document.title = "Sign Up - Blueprint App";
     }, []);
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess('');
         setIsLoading(true);
-
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             setIsLoading(false);
             return;
         }
-
         try {
             const res = await fetch('/api/register', {
                 method: 'POST',
@@ -52,9 +45,7 @@ export default function SignUpPage() {
                     password: formData.password
                 })
             });
-
             const responseData = await res.json();
-
             if (res.ok) {
                 setSuccess('Registration successful!');
                 setFormData({ name: '', email: '', password: '', confirmPassword: '' });
@@ -64,14 +55,12 @@ export default function SignUpPage() {
             } else {
                 setError(responseData.error || 'Registration failed. Please try again.');
             }
-        } catch (error) {
-            console.error('Registration failed:', error);
+        } catch {
             setError('Registration failed. Please try again.');
         } finally {
             setIsLoading(false);
         }
     }
-
     return (
         <div>
             <h2 className="text-xl mb-4 font-bold">Create Account</h2>
@@ -92,7 +81,6 @@ export default function SignUpPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-
                 <FormGroup 
                     label="Email" 
                     labelFor="email-input"
@@ -109,7 +97,6 @@ export default function SignUpPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-
                 <FormGroup 
                     label="Password" 
                     labelFor="password-input"
@@ -126,7 +113,6 @@ export default function SignUpPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-
                 <FormGroup 
                     label="Confirm Password" 
                     labelFor="confirmPassword-input"
@@ -143,7 +129,6 @@ export default function SignUpPage() {
                         intent={Intent.NONE}
                     />
                 </FormGroup>
-
                 <Button 
                     type="submit" 
                     intent="success" 
@@ -153,19 +138,16 @@ export default function SignUpPage() {
                     disabled={isLoading}
                 />
             </form>
-            
             {error && (
                 <Callout intent="danger" className="mt-4">
                     {error}
                 </Callout>
             )}
-            
             {success && (
                 <Callout intent="success" className="mt-4">
                     {success}
                 </Callout>
             )}
-            
             <p className="mt-4 text-sm">
                 <span>Already have an account?</span>{' '}
                 <Link href="/sign-in" className="text-blue-600 underline">
