@@ -31,12 +31,6 @@ export default function HomePage() {
                             <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
                             <div className="space-y-3">
                                 <Button 
-                                    text="View Profile" 
-                                    intent="primary" 
-                                    fill 
-                                    disabled
-                                />
-                                <Button 
                                     text="Settings" 
                                     intent="none" 
                                     fill 

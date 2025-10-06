@@ -6,9 +6,7 @@ export function Menubar() {
     const router = useRouter();
     const { data: session, status } = useSession();
     const menus = {
-        File: ["New", "--", "Upload", "Export"],
-        Tools: ["Builder",],
-        Help: ["About",],
+        Projects: ["Portfolio"],
         Settings: ["Preferences",],
     };
     const handleMenuClick = (item: string, router: { push: (path: string) => void }) => {
