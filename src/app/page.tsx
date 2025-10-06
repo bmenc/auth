@@ -1,8 +1,6 @@
-"use client";
-import { Button } from "@blueprintjs/core";
+'use client';
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <Button>Click Me</Button>
-  );
+  redirect("/sign-in");
 }

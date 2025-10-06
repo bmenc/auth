@@ -6,12 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "auth:demo": "node scripts/toggle-auth.js && echo 'Switched to Demo mode'",
+    "auth:real": "node -e \"const fs=require('fs'); const content=fs.readFileSync('.env','utf8').replace(/AUTH=(true|false)/,'AUTH=true'); fs.writeFileSync('.env',content); console.log('Switched to Real mode (MongoDB)')\"",
+    "auth:status": "node -e \"const fs=require('fs'); const content=fs.readFileSync('.env','utf8'); const match=content.match(/AUTH=(true|false)/); console.log('Current auth mode:', match ? (match[1]==='true' ? 'MongoDB (Real)' : 'Demo') : 'Not set')\""
   },
   "dependencies": {
     "@blueprintjs/core": "^6.3.1",
     "@blueprintjs/icons": "^6.1.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.2",
+    "mongoose": "^8.19.0",
     "next": "14.2.32",
+    "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18"
   },
