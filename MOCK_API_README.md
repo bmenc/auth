@@ -1,50 +1,49 @@
 # Mock API Server - HEMODILAB
 
-Este proyecto incluye un servidor Mock API que genera rutas dinámicas basadas en los datos almacenados en la colección `response_data` de MongoDB.
+Este proyecto incluye un Mock API implementado con Next.js API Routes que genera rutas dinámicas basadas en los datos almacenados en la colección `response_data` de MongoDB.
 
 ## Características
 
 1. **Rutas Dinámicas**: Genera endpoints automáticamente basados en los datos de `response_data`
 2. **Swagger Documentation**: Genera documentación Swagger automáticamente
-3. **Dos Modos de Operación**:
-   - **Next.js API Routes**: Rutas en `http://localhost:3000/api/hemodilab/{endpoint}`
-   - **Mock Server Express**: Servidor independiente en `http://localhost:60341`
+3. **Next.js API Routes**: Implementado completamente con rutas API nativas de Next.js
 
 ## Uso
 
-### Opción 1: Servidor Mock Express (Puerto 60341)
+### Desarrollo Local
 
 ```bash
-# Iniciar solo el servidor mock
-npm run dev:mock
-
-# O iniciar ambos servidores (Next.js + Mock API)
-npm run dev:all
+npm run dev
 ```
 
-El servidor mock estará disponible en:
-- **API Base**: `http://localhost:60341`
-- **Swagger UI**: `http://localhost:60341/swagger`
-- **Swagger JSON**: `http://localhost:60341/swagger.json`
-- **Health Check**: `http://localhost:60341/health`
+El servidor estará disponible en `http://localhost:3000` con las siguientes rutas:
 
-### Opción 2: Next.js API Routes (Puerto 3000)
-
-Las rutas dinámicas están disponibles en:
 - **API Base**: `http://localhost:3000/api/hemodilab/{endpoint}`
-- **Swagger JSON**: `http://localhost:3000/api/swagger`
+- **Swagger JSON**: `http://localhost:3000/api/swagger` o `http://localhost:3000/api/swagger.json`
 - **Swagger UI**: `http://localhost:3000/swagger`
+- **Health Check**: `http://localhost:3000/api/health`
+
+### Producción (Vercel)
+
+El proyecto está completamente compatible con Vercel. Simplemente despliega la aplicación Next.js:
+
+```bash
+npm run build
+npm start
+```
+
+Todas las rutas API funcionarán como serverless functions en Vercel.
 
 ## Estructura de Endpoints
 
 Los endpoints se generan automáticamente basados en el campo `url` de cada registro en `response_data`:
 
-- Si `url` está definido: `/hemodilab{url}`
-- Si `url` está vacío: `/hemodilab/api/{entity.toLowerCase()}`
+- Si `url` está definido: `/api/hemodilab{url}`
+- Si `url` está vacío: `/api/hemodilab/api/{entity.toLowerCase()}`
 
 Ejemplo:
-- Si `url = "/patients"` y `method = "GET"` → `GET /hemodilab/patients`
-- Si `url = ""` y `entity = "Patient"` → `GET /hemodilab/api/patient`
+- Si `url = "/patients"` y `method = "GET"` → `GET /api/hemodilab/patients`
+- Si `url = ""` y `entity = "Patient"` → `GET /api/hemodilab/api/patient`
 
 ## Respuestas
 
@@ -52,7 +51,7 @@ Cada endpoint responde con el contenido del campo `response` del registro corres
 
 ## Swagger
 
-La documentación Swagger se genera automáticamente y se actualiza cada vez que se accede al endpoint `/api/swagger`. Incluye:
+La documentación Swagger se genera automáticamente y se actualiza cada vez que se accede al endpoint `/api/swagger` o `/api/swagger.json`. Incluye:
 
 - Todos los endpoints definidos en `response_data`
 - Métodos HTTP (GET, POST, PUT, DELETE)
@@ -61,14 +60,21 @@ La documentación Swagger se genera automáticamente y se actualiza cada vez que
 
 ## Variables de Entorno
 
-El servidor mock usa las siguientes variables de entorno:
+El servidor usa las siguientes variables de entorno:
 
 - `MONGODB_URI`: URI de conexión a MongoDB (requerido)
-- `MOCK_API_PORT`: Puerto para el servidor mock (default: 60341)
+- `NEXT_PUBLIC_API_URL`: URL base de la API (opcional, default: `http://localhost:3000`)
+
+## Arquitectura
+
+- **Rutas API**: `/src/app/api/hemodilab/[...path]/route.ts` - Maneja todas las rutas dinámicas (GET, POST, PUT, DELETE)
+- **Swagger**: `/src/app/api/swagger/route.ts` y `/src/app/api/swagger.json/route.ts` - Genera la especificación Swagger
+- **Health Check**: `/src/app/api/health/route.ts` - Endpoint de salud del servidor
+- **Swagger UI**: `/src/app/(logged-in)/swagger/page.tsx` - Interfaz visual de Swagger
 
 ## Notas
 
-- El servidor mock recarga las rutas cada 30 segundos automáticamente
-- Las rutas se generan basándose en los datos actuales de MongoDB
+- Las rutas se generan dinámicamente consultando MongoDB en cada request
+- No hay necesidad de recargar rutas manualmente, siempre están actualizadas
 - Si un endpoint no se encuentra, devuelve un error 404
-
+- Compatible con Vercel y cualquier plataforma que soporte Next.js
