@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
     jwt: {
         maxAge: EXPIRATION_TIME * 60,
     },
-    secret: process.env.NEXTAUTH_SECRET || 'demo-secret-key',
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/sign-in',
         signOut: '/sign-in',

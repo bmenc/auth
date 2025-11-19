@@ -6,8 +6,8 @@ export function Menubar() {
     const router = useRouter();
     const { data: session, status } = useSession();
     const menus = {
-        Projects: ["Portfolio"],
-        Settings: ["Preferences",],
+        Projects: ["HEMODILAB"],
+        Settings: ["Preferences", "Response Data"],
     };
     const handleMenuClick = (item: string, router: { push: (path: string) => void }) => {
         switch (item) {
@@ -16,6 +16,12 @@ export function Menubar() {
                 break;
             case "Preferences":
                 router.push("/settings");
+                break;
+            case "Response Data":
+                router.push("/response-data");
+                break;
+            case "HEMODILAB":
+                router.push("/hemodilab");
                 break;
         }
     }

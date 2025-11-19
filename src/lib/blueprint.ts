@@ -18,5 +18,6 @@ export {
   NavbarGroup,
   Alignment,
   CompoundTag,
-  Position
+  Position,
+  Collapse
 } from "@blueprintjs/core";
