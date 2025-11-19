@@ -105,13 +105,22 @@ export default function HemodilabPage() {
     router.push('/hemodilab/create');
   };
 
+  const handleSwagger = () => {
+    window.open('/swagger', '_blank');
+  };
+
   return (
     <div className="w-full">
       <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">HEMODILAB</h1>
-        <Button intent="primary" onClick={handleCreate}>
-          Add New
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleSwagger} style={{ backgroundColor: '#0f9960', color: 'white' }}>
+            Swagger
+          </Button>
+          <Button intent="primary" onClick={handleCreate}>
+            Add New
+          </Button>
+        </div>
       </div>
       <HTMLTable className="w-full" compact interactive>
         <thead>
