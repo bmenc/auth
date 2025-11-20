@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
@@ -58,13 +60,15 @@ const createDynamicRoutes = async () => {
     const data = await ResponseData.find();
     
     // Limpiar rutas anteriores (solo para desarrollo)
-    app._router.stack = app._router.stack.filter((layer) => {
-      return !layer.route || !layer.route.path.startsWith('/hemodilab/');
-    });
+    if (app._router && app._router.stack) {
+      app._router.stack = app._router.stack.filter((layer) => {
+        return !layer.route || !layer.route.path.startsWith('/hemodilab/');
+      });
+    }
 
     data.forEach((item) => {
       const endpoint = normalizeUrl(item.url || `/api/${item.entity.toLowerCase()}`);
-      const fullPath = `/hemodilab${endpoint}`;
+      const fullPath = `${endpoint}`;
       
       const handler = async (req, res) => {
         try {
