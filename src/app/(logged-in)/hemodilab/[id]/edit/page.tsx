@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { Button, Toast, Spinner } from "@blueprintjs/core";
+import { HTMLTable, Toast, Spinner } from "@blueprintjs/core";
 import { useRouter, useParams } from "next/navigation";
 import { ENTITY_OPTIONS } from "@/constants/entityOptions";
 
@@ -216,58 +216,80 @@ export default function EditHemodilabPage() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6">
-      <div className="mb-6 flex justify-between items-center">
+    <div className="w-full">
+      <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Edit Response Data</h1>
       </div>
       
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Entity</label>
-            {renderField('Entity', 'entity')}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Method</label>
-            {renderField('Method', 'method')}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">URL</label>
-            {renderField('URL', 'url')}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-            {renderField('Description', 'description')}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Parameters</label>
-            {renderField('Parameters', 'parameters')}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Response</label>
-            {renderField('Response', 'response')}
-          </div>
-          
-          <div className="flex items-center">
-            <label className="block text-sm font-medium text-gray-700 mr-3">Auth</label>
-            {renderField('Auth', 'auth')}
-          </div>
-        </div>
-        
-        <div className="mt-6 flex justify-end gap-3">
-          <Button onClick={handleCancel} disabled={loading}>
-            Cancel
-          </Button>
-          <Button intent="primary" onClick={handleSave} loading={loading}>
-            Save
-          </Button>
-        </div>
-      </div>
+      <HTMLTable className="w-full" compact interactive>
+        <thead>
+          <tr className="bg-gray-100/25">
+            <th className="text-left py-2">FIELD</th>
+            <th className="text-left py-2">VALUE</th>
+            <th className="text-right py-2 w-24">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Entity</td>
+            <td className="py-2">
+              {renderField('Entity', 'entity')}
+            </td>
+            <td className="py-2 text-right" rowSpan={7}>
+              <div className="flex flex-col gap-2">
+                <span 
+                  className={`text-xs cursor-pointer hover:text-blue-800 ${loading ? 'text-gray-400 cursor-not-allowed' : 'text-blue-600'}`}
+                  onClick={loading ? undefined : handleSave}
+                >
+                  SAVE
+                </span>
+                <span 
+                  className={`text-xs cursor-pointer hover:text-gray-600 ${loading ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400'}`}
+                  onClick={loading ? undefined : handleCancel}
+                >
+                  CANCEL
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Method</td>
+            <td className="py-2">
+              {renderField('Method', 'method')}
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">URL</td>
+            <td className="py-2">
+              {renderField('URL', 'url')}
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Description</td>
+            <td className="py-2">
+              {renderField('Description', 'description')}
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Parameters</td>
+            <td className="py-2">
+              {renderField('Parameters', 'parameters')}
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Response</td>
+            <td className="py-2">
+              {renderField('Response', 'response')}
+            </td>
+          </tr>
+          <tr className="border-t border-gray-100">
+            <td className="py-2 text-gray-600 text-sm">Auth</td>
+            <td className="py-2">
+              {renderField('Auth', 'auth')}
+            </td>
+          </tr>
+        </tbody>
+      </HTMLTable>
       
       {toasts.map((toast) => (
         <Toast
