@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/authOptions';
 import { connectMongoDB } from '@/lib/mongodb';
 import ResponseData from '@/models/ResponseData';
 
@@ -17,6 +19,11 @@ export async function GET(
   { params }: { params: { path: string[] } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const path = '/' + params.path.join('/');
     await connectMongoDB();
     
@@ -50,6 +57,11 @@ export async function POST(
   { params }: { params: { path: string[] } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const path = '/' + params.path.join('/');
     await connectMongoDB();
     
@@ -81,6 +93,11 @@ export async function PUT(
   { params }: { params: { path: string[] } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const path = '/' + params.path.join('/');
     await connectMongoDB();
     
@@ -112,6 +129,11 @@ export async function DELETE(
   { params }: { params: { path: string[] } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const path = '/' + params.path.join('/');
     await connectMongoDB();
     
