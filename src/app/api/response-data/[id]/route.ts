@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/authOptions';
+import { isAuthenticated } from '@/lib/apiAuth';
 import { connectMongoDB } from '@/lib/mongodb';
 import ResponseData from '@/models/ResponseData';
 import { ENTITY_OPTIONS } from '@/constants/entityOptions';
@@ -10,8 +9,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const authenticated = await isAuthenticated(request);
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const { id } = params;
@@ -54,8 +53,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const authenticated = await isAuthenticated(request);
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const { id } = params;
